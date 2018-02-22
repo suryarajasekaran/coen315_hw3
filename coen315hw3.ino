@@ -100,7 +100,9 @@ void handleNotFound() {
       Serial.println("waiting for response, client is still available ...");
       outData += client.readStringUntil('\n');
       Serial.println("waiting for response, temporary response ..."+outData);
+      delay(0);
     }
+    delay(1);
   }
   Serial.println("obtained response ... " + outData);
   Serial.println("disconnecting ... ");
