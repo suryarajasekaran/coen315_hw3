@@ -7,13 +7,11 @@
 #include "FS.h"
 
 /* Set desired credentials. */
-const char* ssid = "Surya";//"sudhome-5";
-const char* password = "";//"2618suddus";
+const char* ssid = "Sudhish-Phone-i7";
+const char* password = "18188181";
 
 const char* newssid = "Surya";
 const char* newpassword = "";
-
-const char* host = "192.168.8.2";
 
 ESP8266WiFiMulti wifiMulti;     // Create an instance of the ESP8266WiFiMulti class, called 'wifiMulti'
 ESP8266WebServer server(80);    // Create a webserver object that listens for HTTP request on port 80
@@ -43,7 +41,7 @@ void setup(void)
   server.begin();                           // Starting the server
   Serial.println("http server started");
 
-  /*if (strcmp (WiFi.SSID().c_str(),ssid) != 0) {
+  if (strcmp (WiFi.SSID().c_str(),ssid) != 0) {
       Serial.print("Connecting to ");
       Serial.println(ssid);
       WiFi.begin(ssid, password);
@@ -56,7 +54,7 @@ void setup(void)
   Serial.print("Connected to: ");
   Serial.print(WiFi.SSID());
   Serial.print(", IP address: ");
-  Serial.println(WiFi.localIP());*/
+  Serial.println(WiFi.localIP());
 }
 
 void loop(void)
@@ -81,7 +79,7 @@ void handleNotFound() {
   Serial.println("splitting host section ... " + hostSection);
   Serial.println("splitting uri section ... " + uriSection);
   WiFiClient client;
-  client.setTimeout(200);
+  client.setTimeout(1000);
   Serial.println("connecting to ... " + hostSection);
   while (!!!client.connect(hostSection, 80)) {
     Serial.println("connection failed, retrying...");
