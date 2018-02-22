@@ -7,11 +7,11 @@
 #include "FS.h"
 
 /* Set desired credentials. */
-const char* newssid = "sudhome-5";
-const char* newpassword = "2618suddus";
+const char* ssid = "Surya";//"sudhome-5";
+const char* password = "";//"2618suddus";
 
-const char* ssid = "Surya";
-const char* password = "";
+const char* newssid = "Surya";
+const char* newpassword = "";
 
 const char* host = "192.168.8.2";
 
@@ -31,9 +31,9 @@ void setup(void)
   Serial.println('\n');
   
   WiFi.mode(WIFI_AP_STA); 
-  WiFi.softAP(ssid);      
+  WiFi.softAP(newssid);      
   
-  Serial.println(ssid);                // print the Wifi name and the IP address
+  Serial.println(newssid);                // print the Wifi name and the IP address
   Serial.print("server ip ... "+WiFi.softAPIP());
   Serial.println("connected to ... "+WiFi.SSID());
   Serial.println("ip address ... "+WiFi.localIP()); // Send the IP address of the ESP8266 to the computer
@@ -42,6 +42,21 @@ void setup(void)
   server.onNotFound(handleNotFound);        // Call handleNotFound() when anything other than the above mentioned URLs are called 
   server.begin();                           // Starting the server
   Serial.println("http server started");
+
+  /*if (strcmp (WiFi.SSID().c_str(),ssid) != 0) {
+      Serial.print("Connecting to ");
+      Serial.println(ssid);
+      WiFi.begin(ssid, password);
+  }
+
+  while (WiFi.status() != WL_CONNECTED) {
+    yield();
+  }
+
+  Serial.print("Connected to: ");
+  Serial.print(WiFi.SSID());
+  Serial.print(", IP address: ");
+  Serial.println(WiFi.localIP());*/
 }
 
 void loop(void)
@@ -58,19 +73,23 @@ void handleRoot()
 
 void handleNotFound() {
   Serial.println("\n\n[handleNotFound:]");
-  String requestHost = server.uri();
-  requestHost.replace("/", "");
-  Serial.println("proxying request to ... " + requestHost);
+  String requestLinkOriginal = server.uri();
+  String requestLink = requestLinkOriginal.substring(1,-1);
+  int posSplit = requestLink.indexOf('/');
+  String hostSection = requestLink.substring(0,posSplit);
+  String uriSection = requestLink.substring(posSplit,-1);
+  Serial.println("splitting host section ... " + hostSection);
+  Serial.println("splitting uri section ... " + uriSection);
   WiFiClient client;
   client.setTimeout(200);
-  Serial.println("connecting to ... " + requestHost);
-  while (!!!client.connect(requestHost, 80)) {
+  Serial.println("connecting to ... " + hostSection);
+  while (!!!client.connect(hostSection, 80)) {
     Serial.println("connection failed, retrying...");
   }
   Serial.println("connection successful, proceeding...");
-  Serial.println("sending a request to ... " + requestHost);
-  client.print(String("GET /") + " HTTP/1.1\r\n" +
-               "Host: " + requestHost + "\r\n" +
+  Serial.println("sending a request to ... " + hostSection);
+  client.print(String("GET "+uriSection) + " HTTP/1.1\r\n" +
+               "Host: " + hostSection + "\r\n" +
                "Connection: close\r\n" +
                "\r\n"
               );
