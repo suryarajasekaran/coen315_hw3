@@ -109,7 +109,7 @@ void handleNotFound() {
   client.stop();
   int pos = outData.indexOf('<');
   String html = outData.substring(pos,-1);
-  html.replace("html", "WHAT-IS-THIS");
-  html.replace("HTML", "WHAT-IS-THIS");
+  html.replace("http", "WHAT-IS-THIS");
+  html.replace("HTTP", "WHAT-IS-THIS");
   server.send(200, "text/html", html);
 }
